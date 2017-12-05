@@ -8,8 +8,12 @@ namespace SematicNetworksFinal
 {
     public class Program
     {
+        static RavenMatrixSolver matrixSolver;
         public static void Main(string[] args)
         {
+            int?[,] exampleMatrix = { {2,4 }, {1, null } };
+            matrixSolver = new RavenMatrixSolver(exampleMatrix);
+            matrixSolver.SolveMatrix();
         }
     }
 }
