@@ -9,6 +9,7 @@ namespace SematicNetworksFinal
     public class RavenMatrixSolver
     {
         private int?[,] curMatrix;
+        private int[,] solvedMatrix;
         public RavenMatrixSolver(int?[,] matrix)
         {
             curMatrix = matrix;
@@ -16,59 +17,62 @@ namespace SematicNetworksFinal
 
         public void SolveMatrix()
         {
-            int[,] solvedMatrix = new int[curMatrix.GetLength(0), curMatrix.GetLength(1)];
-            CheckByAddition();
+            solvedMatrix = new int[curMatrix.GetLength(0), curMatrix.GetLength(1)];
+            if (CheckByAddition())
+            {
+                PrintSolvedMatrix();
+            }
         }
 
-        private int? CheckByAddition()
+        private bool CheckByAddition()
         {
-            int? addBy = null;
+            bool isAddable = false;
             int maxCount = 10;
-            int colAddBy, rowAddBy;
+            int? colAddBy = null, rowAddBy = null;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
-                colAddBy = 1;
-                while (colAddBy <= maxCount)
+                int curColAddBy = 1;
+                while (curColAddBy <= maxCount && colAddBy == null)
                 {
-                    bool colAddWorks = true;
-                    for (int y = 0; y < curMatrix.GetLength(1) - 1 && colAddWorks; y++)
+                    bool curColAddWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(1) && curColAddWorks; y++)
                     {
-                        for (int z = y + 1; y < curMatrix.GetLength(1) - 2 && colAddWorks; z++)
+                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColAddWorks; z++)
                         {
                             if (curMatrix[j, y] != null && curMatrix[j, z] != null)
                             {
                                 int dif = curMatrix[j, y].Value - curMatrix[j, z].Value;
-                                if (Math.Abs(dif) != addBy)
+                                if (Math.Abs(dif) != curColAddBy)
                                 {
-                                    colAddWorks = false;
+                                    curColAddWorks = false;
                                 }
                             }
                         }
                     }
-                    if (!colAddWorks)
+                    if (!curColAddWorks)
                     {
-                        colAddBy++;
+                        curColAddBy++;
                     }
                     else
                     {
-                        break;
+                        colAddBy = curColAddBy;
                     }
                 }
             }
-            for(int j = 0; j < curMatrix.GetLength(1); j++)
+            for (int j = 0; j < curMatrix.GetLength(1); j++)
             {
-                rowAddBy = 1;
-                while(rowAddBy <= maxCount)
+                int curRowAddBy = 1;
+                while (curRowAddBy <= maxCount && rowAddBy == null)
                 {
                     bool rowAddWorks = true;
-                    for (int y = 0; y < curMatrix.GetLength(0) - 1 && rowAddWorks; y++)
+                    for (int y = 0; y < curMatrix.GetLength(0) && rowAddWorks; y++)
                     {
-                        for (int z = y + 1; y < curMatrix.GetLength(0) && rowAddWorks; z++)
+                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowAddWorks; z++)
                         {
                             if (curMatrix[y, j] != null && curMatrix[z, j] != null)
                             {
                                 int dif = curMatrix[y, j].Value - curMatrix[z, j].Value;
-                                if (Math.Abs(dif) != addBy)
+                                if (Math.Abs(dif) != curRowAddBy)
                                 {
                                     rowAddWorks = false;
                                 }
@@ -77,46 +81,82 @@ namespace SematicNetworksFinal
                     }
                     if (!rowAddWorks)
                     {
-                        rowAddBy++;
+                        curRowAddBy++;
                     }
                     else
                     {
-                        break;
+                        rowAddBy = curRowAddBy;
                     }
 
                 }
             }
-            return addBy;
+            if (colAddBy != null && rowAddBy != null)
+            {
+                curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 2, curMatrix.GetLength(1) - 2] + rowAddBy;
+                ConvertTo2DArray();
+                isAddable = true;
+            }
+
+            return isAddable;
         }
 
-        private int? CheckBySubtraction()
+        private void ConvertTo2DArray()
         {
-            int? addBy = null;
+            for (int j = 0; j < curMatrix.GetLength(0); j++)
+            {
+                for (int k = 0; k < curMatrix.GetLength(1); k++)
+                {
+                    if (curMatrix[j, k] != null)
+                    {
+                        solvedMatrix[j, k] = curMatrix[j, k].Value;
+                    }
+                }
+            }
+        }
+
+        private bool CheckBySubtraction()
+        {
+            bool isSubtractable = false;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
 
             }
-            return addBy;
+            return isSubtractable;
         }
 
-        private int? CheckByMultiplication()
+        private bool CheckByMultiplication()
         {
-            int? addBy = null;
+            bool isMultiplication = false;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
 
             }
-            return addBy;
+            return isMultiplication;
         }
 
-        private int? CheckByDivision()
+        private bool CheckByDivision()
         {
-            int? addBy = null;
+            bool isDivisable = false;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
 
             }
-            return addBy;
+            return isDivisable;
+        }
+
+        private void PrintSolvedMatrix()
+        {
+            string matrix = "";
+            for(int j = 0; j < solvedMatrix.GetLength(0); j++)
+            {
+                matrix += "| ";
+                for(int k = 0; k < solvedMatrix.GetLength(1); k++)
+                {
+                    matrix += solvedMatrix[j, k] + " ";
+                }
+                matrix += "|\n";
+            }
+            Console.WriteLine(matrix);
         }
     }
 }
