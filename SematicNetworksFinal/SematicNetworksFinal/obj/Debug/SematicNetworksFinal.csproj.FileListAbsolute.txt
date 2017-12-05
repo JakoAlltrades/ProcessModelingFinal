@@ -1,0 +1,6 @@
+C:\Users\jprirm\Documents\GitHub\ProcessModelingFinal\SematicNetworksFinal\SematicNetworksFinal\bin\Debug\SematicNetworksFinal.exe.config
+C:\Users\jprirm\Documents\GitHub\ProcessModelingFinal\SematicNetworksFinal\SematicNetworksFinal\bin\Debug\SematicNetworksFinal.exe
+C:\Users\jprirm\Documents\GitHub\ProcessModelingFinal\SematicNetworksFinal\SematicNetworksFinal\bin\Debug\SematicNetworksFinal.pdb
+C:\Users\jprirm\Documents\GitHub\ProcessModelingFinal\SematicNetworksFinal\SematicNetworksFinal\obj\Debug\SematicNetworksFinal.csprojResolveAssemblyReference.cache
+C:\Users\jprirm\Documents\GitHub\ProcessModelingFinal\SematicNetworksFinal\SematicNetworksFinal\obj\Debug\SematicNetworksFinal.exe
+C:\Users\jprirm\Documents\GitHub\ProcessModelingFinal\SematicNetworksFinal\SematicNetworksFinal\obj\Debug\SematicNetworksFinal.pdb

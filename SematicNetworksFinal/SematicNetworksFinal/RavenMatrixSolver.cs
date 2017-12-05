@@ -17,15 +17,74 @@ namespace SematicNetworksFinal
         public void SolveMatrix()
         {
             int[,] solvedMatrix = new int[curMatrix.GetLength(0), curMatrix.GetLength(1)];
+            CheckByAddition();
         }
 
         private int? CheckByAddition()
         {
             int? addBy = null;
-            bool[] rowsWork;
-            for(int j = 0; j < curMatrix.GetLength(0); j++)//each row
+            int maxCount = 10;
+            int colAddBy, rowAddBy;
+            for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
-                
+                colAddBy = 1;
+                while (colAddBy <= maxCount)
+                {
+                    bool colAddWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(1) - 1 && colAddWorks; y++)
+                    {
+                        for (int z = y + 1; y < curMatrix.GetLength(1) - 2 && colAddWorks; z++)
+                        {
+                            if (curMatrix[j, y] != null && curMatrix[j, z] != null)
+                            {
+                                int dif = curMatrix[j, y].Value - curMatrix[j, z].Value;
+                                if (Math.Abs(dif) != addBy)
+                                {
+                                    colAddWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!colAddWorks)
+                    {
+                        colAddBy++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            for(int j = 0; j < curMatrix.GetLength(1); j++)
+            {
+                rowAddBy = 1;
+                while(rowAddBy <= maxCount)
+                {
+                    bool rowAddWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(0) - 1 && rowAddWorks; y++)
+                    {
+                        for (int z = y + 1; y < curMatrix.GetLength(0) && rowAddWorks; z++)
+                        {
+                            if (curMatrix[y, j] != null && curMatrix[z, j] != null)
+                            {
+                                int dif = curMatrix[y, j].Value - curMatrix[z, j].Value;
+                                if (Math.Abs(dif) != addBy)
+                                {
+                                    rowAddWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!rowAddWorks)
+                    {
+                        rowAddBy++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
             }
             return addBy;
         }
@@ -33,7 +92,6 @@ namespace SematicNetworksFinal
         private int? CheckBySubtraction()
         {
             int? addBy = null;
-            bool[] rowsWork;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
 
@@ -44,7 +102,6 @@ namespace SematicNetworksFinal
         private int? CheckByMultiplication()
         {
             int? addBy = null;
-            bool[] rowsWork;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
 
@@ -55,7 +112,6 @@ namespace SematicNetworksFinal
         private int? CheckByDivision()
         {
             int? addBy = null;
-            bool[] rowsWork;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
 
