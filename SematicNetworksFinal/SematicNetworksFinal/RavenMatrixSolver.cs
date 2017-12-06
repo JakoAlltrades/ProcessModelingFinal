@@ -22,6 +22,10 @@ namespace SematicNetworksFinal
             {
                 PrintSolvedMatrix();
             }
+            if(CheckBySubtraction())
+            {
+                PrintSolvedMatrix();
+            }
         }
 
         private bool CheckByAddition()
@@ -42,7 +46,7 @@ namespace SematicNetworksFinal
                             if (curMatrix[j, y] != null && curMatrix[j, z] != null)
                             {
                                 int dif = curMatrix[j, y].Value - curMatrix[j, z].Value;
-                                if (Math.Abs(dif) != curColAddBy)
+                                if (curMatrix[j, y].Value + curColAddBy != curMatrix[j, z].Value)
                                 {
                                     curColAddWorks = false;
                                 }
@@ -71,8 +75,7 @@ namespace SematicNetworksFinal
                         {
                             if (curMatrix[y, j] != null && curMatrix[z, j] != null)
                             {
-                                int dif = curMatrix[y, j].Value - curMatrix[z, j].Value;
-                                if (Math.Abs(dif) != curRowAddBy)
+                                if (curRowAddBy + curMatrix[j,y] != curMatrix[j,z])
                                 {
                                     rowAddWorks = false;
                                 }
@@ -92,7 +95,7 @@ namespace SematicNetworksFinal
             }
             if (colAddBy != null && rowAddBy != null)
             {
-                curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 2, curMatrix.GetLength(1) - 2] + rowAddBy;
+                curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 2] + rowAddBy;
                 ConvertTo2DArray();
                 isAddable = true;
             }
@@ -117,10 +120,76 @@ namespace SematicNetworksFinal
         private bool CheckBySubtraction()
         {
             bool isSubtractable = false;
+            int? colSubtract = null, rowSubtract = null;
+            int maxCount = 10;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
-
+                int curColSubtract = 1;
+                while (curColSubtract <= maxCount && colSubtract == null)
+                {
+                    bool curColAddWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(1) && curColAddWorks; y++)
+                    {
+                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColAddWorks; z++)
+                        {
+                            if (curMatrix[j, y] != null && curMatrix[j, z] != null)
+                            {
+                                int dif = curMatrix[j, z].Value - curMatrix[j, y].Value;
+                                
+                                if (curMatrix[j, y].Value - curColSubtract != curMatrix[j, z].Value)
+                                {
+                                    curColAddWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!curColAddWorks)
+                    {
+                        curColSubtract++;
+                    }
+                    else
+                    {
+                        colSubtract = curColSubtract;
+                    }
+                }
             }
+            for (int j = 0; j < curMatrix.GetLength(1); j++)
+            {
+                int curRowSubtract = 1;
+                while (curRowSubtract <= maxCount && rowSubtract == null)
+                {
+                    bool rowAddWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(0) && rowAddWorks; y++)
+                    {
+                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowAddWorks; z++)
+                        {
+                            if (curMatrix[y, j] != null && curMatrix[z, j] != null)
+                            {
+                                if (curMatrix[y, j].Value - curRowSubtract != curMatrix[z,j].Value)
+                                {
+                                    rowAddWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!rowAddWorks)
+                    {
+                        curRowSubtract++;
+                    }
+                    else
+                    {
+                        rowSubtract = curRowSubtract;
+                    }
+
+                }
+            }
+            if (colSubtract != null && rowSubtract != null)
+            {
+                curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1)-2] - colSubtract;
+                ConvertTo2DArray();
+                isSubtractable = true;
+            }
+
             return isSubtractable;
         }
 
