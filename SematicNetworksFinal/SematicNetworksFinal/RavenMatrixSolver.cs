@@ -9,22 +9,58 @@ namespace SematicNetworksFinal
     public class RavenMatrixSolver
     {
         private int?[,] curMatrix;
+        private int?[,] solvableMatrix;
         private int[,] solvedMatrix;
         public RavenMatrixSolver(int?[,] matrix)
         {
-            curMatrix = matrix;
+            solvableMatrix = matrix;
+        }
+
+        private void PrintSolvableMatix()
+        {
+            string matrix = "";
+            for (int j = 0; j < solvableMatrix.GetLength(0); j++)
+            {
+                matrix += "| ";
+                for (int k = 0; k < solvableMatrix.GetLength(1); k++)
+                {
+                    if (solvableMatrix[j, k] != null)
+                    {
+                        matrix += solvableMatrix[j, k] + " ";
+                    }
+                    else
+                    {
+                        matrix += "null ";
+                    }
+                }
+                matrix += "|\n";
+            }
+            Console.WriteLine(matrix);
         }
 
         public void SolveMatrix()
         {
-            solvedMatrix = new int[curMatrix.GetLength(0), curMatrix.GetLength(1)];
+            Console.WriteLine("Current solvable matrix::");
+            PrintSolvableMatix();
+            solvedMatrix = new int[solvableMatrix.GetLength(0), solvableMatrix.GetLength(1)];
+            curMatrix = solvableMatrix;
             if (CheckByAddition())
             {
+                Console.WriteLine("Addition Solve:");
                 PrintSolvedMatrix();
+                curMatrix = solvableMatrix;
             }
-            if(CheckBySubtraction())
+            if (CheckBySubtraction())
             {
+                Console.WriteLine("Subtraction Solve:");
                 PrintSolvedMatrix();
+                curMatrix = solvableMatrix;
+            }
+            if (CheckByMultiplication())
+            {
+                Console.WriteLine("Multiplication Solve:");
+                PrintSolvedMatrix();
+                curMatrix = solvableMatrix;
             }
         }
 
@@ -127,10 +163,10 @@ namespace SematicNetworksFinal
                 int curColSubtract = 1;
                 while (curColSubtract <= maxCount && colSubtract == null)
                 {
-                    bool curColAddWorks = true;
-                    for (int y = 0; y < curMatrix.GetLength(1) && curColAddWorks; y++)
+                    bool curColSubtractWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(1) && curColSubtractWorks; y++)
                     {
-                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColAddWorks; z++)
+                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColSubtractWorks; z++)
                         {
                             if (curMatrix[j, y] != null && curMatrix[j, z] != null)
                             {
@@ -138,12 +174,12 @@ namespace SematicNetworksFinal
                                 
                                 if (curMatrix[j, y].Value - curColSubtract != curMatrix[j, z].Value)
                                 {
-                                    curColAddWorks = false;
+                                    curColSubtractWorks = false;
                                 }
                             }
                         }
                     }
-                    if (!curColAddWorks)
+                    if (!curColSubtractWorks)
                     {
                         curColSubtract++;
                     }
@@ -158,21 +194,21 @@ namespace SematicNetworksFinal
                 int curRowSubtract = 1;
                 while (curRowSubtract <= maxCount && rowSubtract == null)
                 {
-                    bool rowAddWorks = true;
-                    for (int y = 0; y < curMatrix.GetLength(0) && rowAddWorks; y++)
+                    bool rowSubtractWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(0) && rowSubtractWorks; y++)
                     {
-                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowAddWorks; z++)
+                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowSubtractWorks; z++)
                         {
                             if (curMatrix[y, j] != null && curMatrix[z, j] != null)
                             {
                                 if (curMatrix[y, j].Value - curRowSubtract != curMatrix[z,j].Value)
                                 {
-                                    rowAddWorks = false;
+                                    rowSubtractWorks = false;
                                 }
                             }
                         }
                     }
-                    if (!rowAddWorks)
+                    if (!rowSubtractWorks)
                     {
                         curRowSubtract++;
                     }
@@ -196,10 +232,76 @@ namespace SematicNetworksFinal
         private bool CheckByMultiplication()
         {
             bool isMultiplication = false;
+            int? colMult = null, rowMult = null;
+            int maxCount = 10;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
+                int curColMult = 1;
+                while (curColMult <= maxCount && colMult == null)
+                {
+                    bool curColMultWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(1) && curColMultWorks; y++)
+                    {
+                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColMultWorks; z++)
+                        {
+                            if (curMatrix[j, y] != null && curMatrix[j, z] != null)
+                            {
+                                int dif = curMatrix[j, z].Value - curMatrix[j, y].Value;
 
+                                if (curMatrix[j, y].Value * curColMult != curMatrix[j, z].Value)
+                                {
+                                    curColMultWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!curColMultWorks)
+                    {
+                        curColMult++;
+                    }
+                    else
+                    {
+                        colMult = curColMult;
+                    }
+                }
             }
+            for (int j = 0; j < curMatrix.GetLength(1); j++)
+            {
+                int curRowMult = 1;
+                while (curRowMult <= maxCount && rowMult == null)
+                {
+                    bool rowMultWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(0) && rowMultWorks; y++)
+                    {
+                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowMultWorks; z++)
+                        {
+                            if (curMatrix[y, j] != null && curMatrix[z, j] != null)
+                            {
+                                if (curMatrix[y, j].Value * curRowMult != curMatrix[z, j].Value)
+                                {
+                                    rowMultWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!rowMultWorks)
+                    {
+                        curRowMult++;
+                    }
+                    else
+                    {
+                        rowMult = curRowMult;
+                    }
+
+                }
+            }
+            if (colMult != null)
+            {
+                curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 2] * colMult;
+                ConvertTo2DArray();
+                isMultiplication = true;
+            }
+        
             return isMultiplication;
         }
 
