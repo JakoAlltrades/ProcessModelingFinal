@@ -30,7 +30,7 @@ namespace SematicNetworksFinal
                     }
                     else
                     {
-                        matrix += "null ";
+                        matrix += "? ";
                     }
                 }
                 matrix += "|\n";
@@ -50,7 +50,7 @@ namespace SematicNetworksFinal
                 PrintSolvedMatrix();
                 curMatrix = solvableMatrix;
             }
-            if (CheckBySubtraction())
+            else if (CheckBySubtraction())
             {
                 Console.WriteLine("Subtraction Solve:");
                 PrintSolvedMatrix();
@@ -59,6 +59,12 @@ namespace SematicNetworksFinal
             if (CheckByMultiplication())
             {
                 Console.WriteLine("Multiplication Solve:");
+                PrintSolvedMatrix();
+                curMatrix = solvableMatrix;
+            }
+            else if(CheckByDivision())
+            {
+                Console.WriteLine("Division Solve:");
                 PrintSolvedMatrix();
                 curMatrix = solvableMatrix;
             }
@@ -295,7 +301,7 @@ namespace SematicNetworksFinal
 
                 }
             }
-            if (colMult != null)
+            if (colMult != null && rowMult != null)
             {
                 curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 2] * colMult;
                 ConvertTo2DArray();
@@ -308,9 +314,72 @@ namespace SematicNetworksFinal
         private bool CheckByDivision()
         {
             bool isDivisable = false;
+            int? colDiv = null, rowDiv = null;
+            int maxCount = 10;
             for (int j = 0; j < curMatrix.GetLength(0); j++)//each row
             {
+                int curColDiv = 2;
+                while (curColDiv <= maxCount && colDiv == null)
+                {
+                    bool curColDivWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(1) && curColDivWorks; y++)
+                    {
+                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColDivWorks; z++)
+                        {
+                            if (curMatrix[j, y] != null && curMatrix[j, z] != null)
+                            {
+                                if (curMatrix[j, z].Value / curColDiv != curMatrix[j, y].Value)
+                                {
+                                    curColDivWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!curColDivWorks)
+                    {
+                        curColDiv++;
+                    }
+                    else
+                    {
+                        colDiv = curColDiv;
+                    }
+                }
+            }
+            for (int j = 0; j < curMatrix.GetLength(1); j++)
+            {
+                int curDivMult = 2;
+                while (curDivMult <= maxCount && rowDiv == null)
+                {
+                    bool rowDivWorks = true;
+                    for (int y = 0; y < curMatrix.GetLength(0) && rowDivWorks; y++)
+                    {
+                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowDivWorks; z++)
+                        {
+                            if (curMatrix[y, j] != null && curMatrix[z, j] != null)
+                            {
+                                if (curMatrix[y, j].Value / curDivMult != curMatrix[z, j].Value )
+                                {
+                                    rowDivWorks = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!rowDivWorks)
+                    {
+                        curDivMult++;
+                    }
+                    else
+                    {
+                        rowDiv = curDivMult;
+                    }
 
+                }
+            }
+            if (colDiv != null && rowDiv != null)
+            {
+                curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 2] * colDiv;
+                ConvertTo2DArray();
+                isDivisable = true;
             }
             return isDivisable;
         }

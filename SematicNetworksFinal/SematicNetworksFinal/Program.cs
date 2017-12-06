@@ -11,11 +11,14 @@ namespace SematicNetworksFinal
         static RavenMatrixSolver matrixSolver;
         public static void Main(string[] args)
         {
-            int?[,] exampleMatrix = { {2,4 }, {1, null } };
+            int?[,] exampleMatrix = { {2,8 }, {4, null } };
             int?[,] subtractSolve = { { 7, 5, 3 }, { 6, 4, null } };
+            int?[,] diviSolve = { { 4, 16 }, { 2, null } };
             matrixSolver = new RavenMatrixSolver(exampleMatrix);
             matrixSolver.SolveMatrix();
             matrixSolver = new RavenMatrixSolver(subtractSolve);
+            matrixSolver.SolveMatrix();
+            matrixSolver = new RavenMatrixSolver(diviSolve);
             matrixSolver.SolveMatrix();
         }
     }
