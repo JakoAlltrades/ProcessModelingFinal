@@ -116,10 +116,11 @@ namespace SematicNetworksFinal
                     bool rowAddWorks = true;
                     for (int y = 0; y < curMatrix.GetLength(0) && rowAddWorks; y++)
                     {
-                        if(y + 1 < curMatrix.GetLength(1)) { 
+                        if(y + 1 < curMatrix.GetLength(0))
+                        { 
                             if (curMatrix[y, j] != null && curMatrix[y+1, j] != null)
                             {
-                                if (curRowAddBy + curMatrix[j,y] != curMatrix[j,y+1])
+                                if (curRowAddBy + curMatrix[y,j] != curMatrix[y+1,j])
                                 {
                                     rowAddWorks = false;
                                 }
@@ -140,6 +141,7 @@ namespace SematicNetworksFinal
             if (colAddBy != null && rowAddBy != null)
             {
                 curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 2] + rowAddBy;
+                Console.WriteLine("Add by: " + rowAddBy);
                 ConvertTo2DArray();
                 isAddable = true;
             }
@@ -207,11 +209,11 @@ namespace SematicNetworksFinal
                     bool rowSubtractWorks = true;
                     for (int y = 0; y < curMatrix.GetLength(0) && rowSubtractWorks; y++)
                     {
-                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowSubtractWorks; z++)
+                        if(y+1 < curMatrix.GetLength(0))
                         {
-                            if (curMatrix[y, j] != null && curMatrix[z, j] != null)
+                            if (curMatrix[y, j] != null && curMatrix[y+1, j] != null)
                             {
-                                if (curMatrix[y, j].Value - curRowSubtract != curMatrix[z,j].Value)
+                                if (curMatrix[y, j].Value - curRowSubtract != curMatrix[y+1,j].Value)
                                 {
                                     rowSubtractWorks = false;
                                 }
@@ -232,6 +234,7 @@ namespace SematicNetworksFinal
             if (colSubtract != null && rowSubtract != null)
             {
                 curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1)-2] - colSubtract;
+                Console.WriteLine("Subtract by: " + colSubtract);
                 ConvertTo2DArray();
                 isSubtractable = true;
             }
@@ -252,11 +255,11 @@ namespace SematicNetworksFinal
                     bool curColMultWorks = true;
                     for (int y = 0; y < curMatrix.GetLength(1) && curColMultWorks; y++)
                     {
-                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColMultWorks; z++)
+                        if(y+1 < curMatrix.GetLength(1))
                         {
-                            if (curMatrix[j, y] != null && curMatrix[j, z] != null)
+                            if (curMatrix[j, y] != null && curMatrix[j, y+1] != null)
                             {
-                                if (curMatrix[j, y].Value * curColMult != curMatrix[j, z].Value)
+                                if (curMatrix[j, y].Value * curColMult != curMatrix[j, y+1].Value)
                                 {
                                     curColMultWorks = false;
                                 }
@@ -281,11 +284,11 @@ namespace SematicNetworksFinal
                     bool rowMultWorks = true;
                     for (int y = 0; y < curMatrix.GetLength(0) && rowMultWorks; y++)
                     {
-                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowMultWorks; z++)
+                        if(y+1 > curMatrix.GetLength(0))
                         {
-                            if (curMatrix[y, j] != null && curMatrix[z, j] != null)
+                            if (curMatrix[y, j] != null && curMatrix[y+1, j] != null)
                             {
-                                if (curMatrix[y, j].Value * curRowMult != curMatrix[z, j].Value)
+                                if (curMatrix[y, j].Value * curRowMult != curMatrix[y+1, j].Value)
                                 {
                                     rowMultWorks = false;
                                 }
@@ -306,6 +309,7 @@ namespace SematicNetworksFinal
             if (colMult != null && rowMult != null)
             {
                 curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 2] * colMult;
+                Console.WriteLine("Multiply by: " + colMult);
                 ConvertTo2DArray();
                 isMultiplication = true;
             }
@@ -326,11 +330,11 @@ namespace SematicNetworksFinal
                     bool curColDivWorks = true;
                     for (int y = 0; y < curMatrix.GetLength(1) && curColDivWorks; y++)
                     {
-                        for (int z = y + 1; z < curMatrix.GetLength(1) && curColDivWorks; z++)
+                        if(y+1 < curMatrix.GetLength(1))
                         {
-                            if (curMatrix[j, y] != null && curMatrix[j, z] != null)
+                            if (curMatrix[j, y] != null && curMatrix[j, y+1] != null)
                             {
-                                if (curMatrix[j, y].Value / curColDiv != curMatrix[j, z].Value)
+                                if (curMatrix[j, y].Value / curColDiv != curMatrix[j, y+1].Value)
                                 {
                                     curColDivWorks = false;
                                 }
@@ -355,11 +359,11 @@ namespace SematicNetworksFinal
                     bool rowDivWorks = true;
                     for (int y = 0; y < curMatrix.GetLength(0) && rowDivWorks; y++)
                     {
-                        for (int z = y + 1; z < curMatrix.GetLength(0) && rowDivWorks; z++)
+                        if(y+1< curMatrix.GetLength(0))
                         {
-                            if (curMatrix[y, j] != null && curMatrix[z, j] != null)
+                            if (curMatrix[y, j] != null && curMatrix[y+1, j] != null)
                             {
-                                if (curMatrix[y, j].Value / curDivMult != curMatrix[z, j].Value )
+                                if (curMatrix[y, j].Value / curDivMult != curMatrix[y+1, j].Value )
                                 {
                                     rowDivWorks = false;
                                 }
@@ -380,6 +384,7 @@ namespace SematicNetworksFinal
             if (colDiv != null)
             {
                 curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 1] = curMatrix[curMatrix.GetLength(0) - 1, curMatrix.GetLength(1) - 2] / colDiv;
+                Console.WriteLine("Divide by: " + colDiv);
                 ConvertTo2DArray();
                 isDivisable = true;
             }
